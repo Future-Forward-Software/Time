@@ -54,7 +54,8 @@ You might go straight to a normal Timer dependency like above and use Task.Delay
 
 Your next step might be something simple like this which would be more stable:
 
-```public class MyTimer : IMyTimer {
+```
+public class MyTimer : IMyTimer {
 	private readonly _msToWait;
 	private readonly _action;
 	
@@ -79,7 +80,8 @@ A new type `ITimer` will be available for transient DI. This just uses the stand
 
 Usage:
 
-```public class MyClass {
+```
+public class MyClass {
     public MyClass(ITimer timer) {
 		var timeBetweenExecutionsInMs = 2000;
 		timer.Elapsed += DoWork;
@@ -97,7 +99,8 @@ Usage:
 
 On its own this would be a pointless abstraction but when you add the fake time services you will be able to use a new type in your tests ```TestTimer```. This tool allows you to synchronously simulate the passage of time like so:
 
-```class MyTests {
+```
+class MyTests {
     
 	[Fact]
 	private void MyClass_WaitTwoSeconds_WritesToConsole() {
