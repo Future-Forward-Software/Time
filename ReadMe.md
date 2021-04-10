@@ -59,13 +59,13 @@ public class MyTimer : IMyTimer {
 	private readonly _msToWait;
 	private readonly _action;
 	
-    MyTimer(int msToWait, Action action) {
-	_msToWait = msToWait;
-	_action = action;
+	MyTimer(int msToWait, Action action) {
+		_msToWait = msToWait;
+		_action = action;
 	}
 	
-	private void BeginTimer() {
-		Task.Delay()msToWait).GetAwaiter().GetResult();
+	public void BeginTimer() {
+		Task.Delay(msToWait).GetAwaiter().GetResult();
 		_action();
 		BeginTimer();
 	}
