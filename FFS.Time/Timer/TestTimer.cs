@@ -8,11 +8,11 @@ namespace FFS.Time.Timer
     {
         private double _msElapsedTime = 0;
         private int _totalAmountOfExecutionsPerformed = 0;
-        private int _msToWaitBetweenWork;
+        private double _msToWaitBetweenWork;
 
         public event ElapsedEventHandler Elapsed;
 
-        public void Start(int ms)
+        public void Start(double ms)
         {
             _msToWaitBetweenWork = ms;
         }

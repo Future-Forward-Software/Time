@@ -6,7 +6,7 @@ namespace FFS.Time.Timer
     public interface ITimer : IDisposable
     {
         event ElapsedEventHandler Elapsed;
-        void Start(int ms);
+        void Start(double ms);
         void Stop();
     }
 }

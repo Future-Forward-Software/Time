@@ -12,7 +12,7 @@ namespace FFS.Time.Timer
             remove => _timer.Elapsed -= value;
         }
 
-        public void Start(int ms)
+        public void Start(double ms)
         {
             _timer.Interval = ms;
             _timer.Start();
