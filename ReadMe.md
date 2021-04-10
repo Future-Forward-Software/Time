@@ -89,9 +89,9 @@ public class MyClass {
 	}
 	
 	private void DoWork(Object source, System.Timers.ElapsedEventArgs e)
-    {
-        Console.WriteLine("The Elapsed event was raised");
-    }
+	{
+		Console.WriteLine("The Elapsed event was raised");
+	}
 }
 ```
 
