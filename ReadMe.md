@@ -78,7 +78,7 @@ A new type `ITimer` will be available for transient DI. This just uses the stand
 
 Usage:
 
-```class MyClass {
+```public class MyClass {
     public MyClass(ITimer timer) {
 		var timeBetweenExecutionsInMs = 2000;
 		timer.Elapsed += DoWork;
