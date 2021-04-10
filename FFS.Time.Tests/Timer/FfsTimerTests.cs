@@ -20,7 +20,7 @@ namespace FFS.Time.Tests.Timer
         [InlineData(1000, 5)]
         [InlineData(1000, 10)]
         [InlineData(2000, 2)]
-        public async Task Timer_ExecutesScheduledEvent(int msBetweenExecutions, int numberOfExecutions)
+        public async Task Start_ExecutesScheduledEvent(int msBetweenExecutions, int numberOfExecutions)
         {
             var timer = new FfsTimer();
             timer.Elapsed += ActionToPerform;
@@ -35,7 +35,31 @@ namespace FFS.Time.Tests.Timer
             _numberOfExecutions.Should().Be(numberOfExecutions);
         }
 
-        private void ActionToPerform(object sender, ElapsedEventArgs e)
+        [Fact]
+        public async Task StartNow_ExecutesEventImmediately()
+        {
+            var timer = new FfsTimer();
+            timer.Elapsed += ActionToPerform;
+
+            timer.StartNow(100000);
+            timer.Stop();
+            _numberOfExecutions.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task StartNow_ExecutesFurtherEvents()
+        {
+            var timer = new FfsTimer();
+            timer.Elapsed += ActionToPerform;
+
+            timer.StartNow(1000);
+            await Task.Delay(1000);
+            timer.Stop();
+
+            _numberOfExecutions.Should().Be(2);
+        }
+
+        private void ActionToPerform()
         {
             Interlocked.Increment(ref _numberOfExecutions);
         }

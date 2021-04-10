@@ -25,7 +25,7 @@ namespace FFS.Time.Tests.Timer
         }
 
         [Fact]
-        public async Task SimulatePassageOfTime_WaitLessThanOneEvent_DoesNotExecuteEvent()
+        public void SimulatePassageOfTime_WaitLessThanOneEvent_DoesNotExecuteEvent()
         {
             var timer = new TestTimer();
             timer.Elapsed += ActionToPerform;
@@ -49,7 +49,7 @@ namespace FFS.Time.Tests.Timer
         [InlineData(1000, 1800)]
         [InlineData(1000, 1900)]
         [InlineData(1000, 1999)]
-        public async Task SimulatePassageOfTime_WaitMoreThanOneEventButLessThanTwo_ExecutesOnesEvent(int timeBetweenEvents, int timeToWait)
+        public void SimulatePassageOfTime_WaitMoreThanOneEventButLessThanTwo_ExecutesOnesEvent(int timeBetweenEvents, int timeToWait)
         {
             var timer = new TestTimer();
             timer.Elapsed += ActionToPerform;
@@ -77,7 +77,7 @@ namespace FFS.Time.Tests.Timer
         [InlineData(TimeIntervals.OneSecond, TimeIntervals.OneHour, 3600)]
         [InlineData(TimeIntervals.FiveMinutes, TimeIntervals.OneHour, 12)]
         [InlineData(TimeIntervals.ThirtyMinutes, TimeIntervals.OneHour, 2)]
-        public async Task SimulatePassageOfTime_Wait_ExecutesCorrectAmountOfEvents(int timeBetweenEvents, int timeToWait, int expectedAmountOfExecuted)
+        public void SimulatePassageOfTime_Wait_ExecutesCorrectAmountOfEvents(int timeBetweenEvents, int timeToWait, int expectedAmountOfExecuted)
         {
             var timer = new TestTimer();
             timer.Elapsed += ActionToPerform;
@@ -89,7 +89,31 @@ namespace FFS.Time.Tests.Timer
             _numberOfExecutions.Should().Be(expectedAmountOfExecuted);
         }
 
-        private void ActionToPerform(object sender, ElapsedEventArgs e)
+        [Fact]
+        public void StartNow_ExecutesEventImmediately()
+        {
+            var timer = new TestTimer();
+            timer.Elapsed += ActionToPerform;
+
+            timer.StartNow(100000);
+            timer.Stop();
+            _numberOfExecutions.Should().Be(1);
+        }
+
+        [Fact]
+        public void StartNow_ExecutesFurtherEvents()
+        {
+            var timer = new TestTimer();
+            timer.Elapsed += ActionToPerform;
+
+            timer.StartNow(1000);
+            timer.SimulateTime(1000);
+            timer.Stop();
+
+            _numberOfExecutions.Should().Be(2);
+        }
+
+        private void ActionToPerform()
         {
             Interlocked.Increment(ref _numberOfExecutions);
         }

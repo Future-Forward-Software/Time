@@ -10,10 +10,16 @@ namespace FFS.Time.Timer
         private int _totalAmountOfExecutionsPerformed = 0;
         private double _msToWaitBetweenWork;
 
-        public event ElapsedEventHandler Elapsed;
+        public event ElapsedHandler Elapsed;
 
         public void Start(double ms)
         {
+            _msToWaitBetweenWork = ms;
+        }
+
+        public void StartNow(double ms)
+        {
+            Elapsed.Invoke();
             _msToWaitBetweenWork = ms;
         }
 
@@ -45,7 +51,7 @@ namespace FFS.Time.Timer
 
         private void ExecuteEvent()
         {
-            Elapsed.Invoke(this, null);
+            Elapsed.Invoke();
             Interlocked.Increment(ref _totalAmountOfExecutionsPerformed);
         }
 

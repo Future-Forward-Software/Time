@@ -1,4 +1,5 @@
-﻿using System.Timers;
+﻿using System.Collections.Generic;
+using System.Timers;
 using NetTimer = System.Timers.Timer;
 
 namespace FFS.Time.Timer
@@ -7,15 +8,36 @@ namespace FFS.Time.Timer
     {
         private NetTimer _timer = new NetTimer();
 
-        public event ElapsedEventHandler Elapsed {
-            add => _timer.Elapsed += value;
-            remove => _timer.Elapsed -= value;
+        // converting the simple ITimer handler to the .net timer one
+        private readonly IDictionary<ElapsedHandler, ElapsedEventHandler> _handlers =
+            new Dictionary<ElapsedHandler, ElapsedEventHandler>();
+        public event ElapsedHandler Elapsed {
+            add {
+                ElapsedEventHandler timerHandler = (object sender, ElapsedEventArgs e) => value();
+                _handlers.Add(value, timerHandler);
+                _timer.Elapsed += timerHandler;
+            }
+            remove {
+                var timerHandler =_handlers[value];
+                _timer.Elapsed -= timerHandler;
+                _handlers.Remove(value);
+            }
         }
 
         public void Start(double ms)
         {
             _timer.Interval = ms;
             _timer.Start();
+        }
+
+        public void StartNow(double ms)
+        {
+            foreach (var handler in _handlers)
+            {
+                handler.Key.Invoke();
+            }
+
+            Start(ms);
         }
 
         public void Stop()
