@@ -29,7 +29,8 @@ Writing testable code is often difficult when using DateTime directly. We can se
  
     Repository.Create(reservation);
     return Ok();
-}```
+}
+```
 
 https://blog.ploeh.dk/2020/04/06/repeatable-execution-in-c/
 
