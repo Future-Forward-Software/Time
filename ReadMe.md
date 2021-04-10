@@ -67,13 +67,14 @@ Your next step might be something simple like this which would be more stable:
 		_action();
 		BeginTimer();
 	}
-}```
+}
+```
 
 This would probably work but be careful as C# does not support tail call recursion optimisation (the stack is not cleaned when a recursive call is made) so this could lead to a stackoverflow exception.
 
 Given the amount of pitfalls here it would be best to use this package instead.
 ### How?
-A new type ```ITimer``` will be available for transient DI. This just uses the standard .net timer behind the scenes.
+A new type `ITimer` will be available for transient DI. This just uses the standard .net timer behind the scenes.
 
 Usage:
 
@@ -88,7 +89,8 @@ Usage:
     {
         Console.WriteLine("The Elapsed event was raised");
     }
-}```
+}
+```
 
 ***Note that ITimer is disposable***
 
@@ -105,6 +107,7 @@ On its own this would be a pointless abstraction but when you add the fake time 
 	}
 	
 	private void AssertHasWrittenToConsole() { ... }
-}```
+}
+```
 
-```SimulateTime``` will cause the timer to move forward immediately so your test will resolve in ms instead of taking 2 seconds (or whatever the timer is set to).
+`SimulateTime` will cause the timer to move forward immediately so your test will resolve in ms instead of taking 2 seconds (or whatever the timer is set to).
