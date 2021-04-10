@@ -12,7 +12,8 @@ If you are integration testing you can also call ```services.AddFakeTime()``` fr
 ### Why?
 Writing testable code is often difficult when using DateTime directly. We can see that in this code example for creating a reservation.
 
-```public ActionResult Post(ReservationDto dto)
+```
+public ActionResult Post(ReservationDto dto)
 {
     if (!DateTime.TryParse(dto.Date, out var _))
         return BadRequest($"Invalid date: {dto.Date}.");
