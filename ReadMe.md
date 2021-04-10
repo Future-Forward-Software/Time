@@ -30,6 +30,7 @@ Writing testable code is often difficult when using DateTime directly. We can se
     Repository.Create(reservation);
     return Ok();
 }```
+
 https://blog.ploeh.dk/2020/04/06/repeatable-execution-in-c/
 
 There is business logic here which relies on comparison of dates, so to test this code you would need to set the reservation date to before DateTime.Now in one test, and after in another.
@@ -39,7 +40,7 @@ Domain Driven Design also teaches us that infrastructure concerns should not be 
 
 See https://enterprisecraftsmanship.com/posts/domain-model-purity-current-time/ for a more in-depth breakdown.
 ### How?
-```ITimeManager``` will be available as a singleton and for unit testing ```TestTimeManager``` can be used.
+`ITimeManager` will be available as a singleton and for unit testing `TestTimeManager` can be used.
 
 This is quite straight forward and provides an implementation to get DateTime values. The test version also provides methods to override these values in your tests.
 
