@@ -36,7 +36,7 @@ namespace FFS.Time.Tests.Timer
         }
 
         [Fact]
-        public async Task StartNow_ExecutesEventImmediately()
+        public void StartNow_ExecutesEventImmediately()
         {
             var timer = new FfsTimer();
             timer.Elapsed += ActionToPerform;

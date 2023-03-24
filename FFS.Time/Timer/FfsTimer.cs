@@ -6,14 +6,14 @@ namespace FFS.Time.Timer
 {
     internal class FfsTimer : ITimer
     {
-        private NetTimer _timer = new NetTimer();
+        private readonly NetTimer _timer = new();
 
         // converting the simple ITimer handler to the .net timer one
         private readonly IDictionary<ElapsedHandler, ElapsedEventHandler> _handlers =
             new Dictionary<ElapsedHandler, ElapsedEventHandler>();
         public event ElapsedHandler Elapsed {
             add {
-                ElapsedEventHandler timerHandler = (object sender, ElapsedEventArgs e) => value();
+                void timerHandler(object sender, ElapsedEventArgs e) => value();
                 _handlers.Add(value, timerHandler);
                 _timer.Elapsed += timerHandler;
             }

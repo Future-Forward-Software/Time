@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
-using System.Timers;
 
 namespace FFS.Time.Timer
 {
-    public class TestTimer : ITimer
+    public sealed class TestTimer : ITimer
     {
         private double _msElapsedTime = 0;
         private int _totalAmountOfExecutionsPerformed = 0;
