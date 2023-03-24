@@ -6,8 +6,6 @@ There are extensions to install this package in ConfigureServices
 
 ```services.AddTime();```
 
-If you are integration testing you can also call ```services.AddFakeTime()``` from your application factory or similar which will replace the registrations with useful implementations for testing.
-
 ## DateTime abstraction
 ### Why?
 Writing testable code is often difficult when using DateTime directly. We can see that in this code example for creating a reservation.
@@ -38,11 +36,10 @@ https://blog.ploeh.dk/2020/04/06/repeatable-execution-in-c/
 There is business logic here which relies on comparison of dates, so to test this code you would need to set the reservation date to before DateTime.Now in one test, and after in another.
 This isnt good though because your test will now be slightly different every time it runs (DateTime.Now). You dont have good control over what the DateTime values are and if you need high precision you could face race conditions in your tests.
 
-Domain Driven Design also teaches us that infrastructure concerns should not be in your domain model or application layers, and accessing the system time is infrastructure. In that case the application layer could use an interface to get system time but should not be directly reliant - you should decide for yourself if this is a good reason for abstracting Time as whilst I agree with this, I can see that it borders on dogmatic and you could lose sight of the point that way.
+Domain Driven Design also teaches us that infrastructure concerns should not be in your domain model or application layers, and accessing the system time is infrastructure.
 
-See https://enterprisecraftsmanship.com/posts/domain-model-purity-current-time/ for a more in-depth breakdown.
 ### How?
-`ITimeManager` will be available as a singleton and for unit testing `TestTimeManager` can be used.
+`ITime` will be available as a singleton and for unit testing `TestTimeManager` can be used.
 
 This is quite straight forward and provides an implementation to get DateTime values. The test version also provides methods to override these values in your tests.
 
@@ -75,15 +72,18 @@ public class MyTimer : IMyTimer {
 This would probably work but be careful as C# does not support tail call recursion optimisation (the stack is not cleaned when a recursive call is made) so this could lead to a stackoverflow exception.
 
 Given the amount of pitfalls here it would be best to use this package instead.
+
 ### How?
-A new type `ITimer` will be available for transient DI. This just uses the standard .net timer behind the scenes.
+A new type `ITimerFactory` will be available for transient DI that can create `ITimer` instances. This just uses the standard .net timer behind the scenes.
 
 Usage:
 
 ```
 public class MyClass {
-    public MyClass(ITimer timer) {
+    public MyClass(ITimerFactory factory) {
 		var timeBetweenExecutionsInMs = 2000;
+
+		var timer = factory.Create();
 		timer.Elapsed += DoWork;
 		timer.Start(timeBetweenExecutionsInMs);
 	}

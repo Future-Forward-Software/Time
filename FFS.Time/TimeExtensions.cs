@@ -8,8 +8,8 @@ namespace FFS.Time
     {
         public static IServiceCollection AddTime(this IServiceCollection services)
         {
-            services.AddSingleton<ITimeManager, FfsTimeManager>();
-            services.AddSingleton<ITimer, FfsTimer>();
+            services.AddSingleton<ITime, FfsTimeManager>();
+            services.AddSingleton<ITimerFactory, TimerFactory>();
 
             return services;
         }

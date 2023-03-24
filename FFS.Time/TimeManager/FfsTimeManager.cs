@@ -2,12 +2,10 @@
 
 namespace FFS.Time.TimeManager
 {
-    internal class FfsTimeManager : ITimeManager
+    internal class FfsTimeManager : ITime
     {
         public DateTime Now => DateTime.Now;
 
-        public DateTime Today => DateTime.Today;
-
-        public DateTime UtcNow => DateTime.UtcNow;
+        public DateOnly Today => DateOnly.FromDateTime(DateTime.Today);
     }
 }
