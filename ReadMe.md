@@ -84,11 +84,24 @@ public class MyClass {
 		var timeBetweenExecutionsInMs = 2000;
 
 		var timer = factory.Create();
+
+		// sync work
 		timer.Elapsed += DoWork;
+
+		// async work
+		timer.Elapsed += async() => {
+			await DoWorkAsync();
+		};
+
 		timer.Start(timeBetweenExecutionsInMs);
 	}
 	
-	private void DoWork(Object source, System.Timers.ElapsedEventArgs e)
+	private void DoWork()
+	{
+		Console.WriteLine("The Elapsed event was raised");
+	}
+
+	private async Task DoWorkAsync()
 	{
 		Console.WriteLine("The Elapsed event was raised");
 	}
