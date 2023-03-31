@@ -1,8 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
-using FFS.Time.Timer;
+﻿using FFS.Time.Timer;
 using FluentAssertions;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FFS.Time.Tests.Timer
@@ -22,6 +21,8 @@ namespace FFS.Time.Tests.Timer
         [InlineData(2000, 2)]
         public async Task Start_ExecutesScheduledEvent(int msBetweenExecutions, int numberOfExecutions)
         {
+            var extraTimeToAllowForInconsistencies = msBetweenExecutions / 2;
+
             var timer = new FfsTimer();
             timer.Elapsed += ActionToPerform;
 
@@ -32,6 +33,7 @@ namespace FFS.Time.Tests.Timer
             }
             timer.Stop();
 
+            await Task.Delay(extraTimeToAllowForInconsistencies);
             _numberOfExecutions.Should().Be(numberOfExecutions);
         }
 
