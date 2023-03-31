@@ -15,14 +15,12 @@ namespace FFS.Time.Tests.Timer
         // and so as the time between timer actions goes down, the expected amount of timer actions invoked gets less stable
         // that stability is improved by increasing time between actions which is why these tests are slow
         [Theory]
-        [InlineData(1000, 1)]
-        [InlineData(1000, 5)]
-        [InlineData(1000, 10)]
-        [InlineData(2000, 2)]
+        [InlineData(10000, 1)]
+        [InlineData(10000, 5)]
+        [InlineData(10000, 10)]
+        [InlineData(20000, 2)]
         public async Task Start_ExecutesScheduledEvent(int msBetweenExecutions, int numberOfExecutions)
         {
-            var extraTimeToAllowForInconsistencies = msBetweenExecutions / 2;
-
             var timer = new FfsTimer();
             timer.Elapsed += ActionToPerform;
 
@@ -33,7 +31,6 @@ namespace FFS.Time.Tests.Timer
             }
             timer.Stop();
 
-            await Task.Delay(extraTimeToAllowForInconsistencies);
             _numberOfExecutions.Should().Be(numberOfExecutions);
         }
 
