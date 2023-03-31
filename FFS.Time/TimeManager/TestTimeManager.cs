@@ -4,12 +4,14 @@ namespace FFS.Time.TimeManager
 {
     public class TestTimeManager : ITime
     {
-        private DateTimeOffset? nowUtc;
+        private DateTimeOffset? utcNow;
 
-        public void Override(DateTimeOffset overrideValue) => nowUtc = overrideValue;
+        public void Override(DateTimeOffset overrideValue) => utcNow = overrideValue;
 
-        public DateTime Now => nowUtc?.LocalDateTime ?? DateTime.Now;
+        public DateTime Now => utcNow?.LocalDateTime ?? DateTime.Now;
 
         public DateOnly Today => DateOnly.FromDateTime(Now);
+
+        public DateTimeOffset UtcNow => utcNow ?? DateTimeOffset.UtcNow;
     }
 }

@@ -6,6 +6,8 @@ namespace FFS.Time.TimeManager
     {
         public DateTime Now => DateTime.Now;
 
+        public DateTimeOffset UtcNow => DateTimeOffset.UtcNow;
+
         public DateOnly Today => DateOnly.FromDateTime(DateTime.Today);
     }
 }
