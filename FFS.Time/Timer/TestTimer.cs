@@ -12,15 +12,19 @@ namespace FFS.Time.Timer
 
         public event ElapsedHandler Elapsed;
 
+        private bool _hasStarted = false;
+
         public void Start(double ms)
         {
             _msToWaitBetweenWork = ms;
+            _hasStarted = true;
         }
 
         public void RunNowAndStart(double ms)
         {
             Elapsed.Invoke();
             _msToWaitBetweenWork = ms;
+            _hasStarted = true;
         }
 
         public void RunInAndStart(double runIn, double ms)
@@ -37,6 +41,8 @@ namespace FFS.Time.Timer
             }
 
             Elapsed += ResetTimer;
+            
+            _hasStarted = true;
         }
 
         public void Stop()
@@ -46,6 +52,9 @@ namespace FFS.Time.Timer
 
         public void SimulateTime(int ms)
         {
+            if(!_hasStarted)
+                throw new InvalidOperationException("Timer has not started yet");
+
             if(_msToWaitBetweenWork == 0)
             {
                 ExecuteEvent();

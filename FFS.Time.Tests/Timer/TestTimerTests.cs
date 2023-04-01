@@ -140,6 +140,18 @@ namespace FFS.Time.Tests.Timer
             _numberOfExecutions.Should().Be(1);
         }
 
+        [Fact]
+        public void SimulateTime_TimeHasntStartedYer_ThrowsInvalidOperationException()
+        {
+            var timer = new TestTimer();
+            timer.Elapsed += ActionToPerform;
+
+            timer.Invoking(t => t.SimulateTime(100))
+                .Should()
+                .Throw<InvalidOperationException>()
+                .WithMessage("Timer has not started yet");
+        }
+
         private void ActionToPerform()
         {
             Interlocked.Increment(ref _numberOfExecutions);
