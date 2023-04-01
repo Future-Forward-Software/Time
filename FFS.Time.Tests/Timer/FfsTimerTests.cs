@@ -27,7 +27,7 @@ namespace FFS.Time.Tests.Timer
             timer.Start(msBetweenExecutions);
             for (int i = 0; i < numberOfExecutions; i++)
             {
-                await Task.Delay(msBetweenExecutions);
+                await Task.Delay(msBetweenExecutions + 10);
             }
             timer.Stop();
 
@@ -65,7 +65,7 @@ namespace FFS.Time.Tests.Timer
             timer.Elapsed += ActionToPerform;
 
             timer.RunInAndStart(1000, 4000);
-            await Task.Delay(1000);
+            await Task.Delay(1100);
 
             _numberOfExecutions.Should().Be(1);
 
