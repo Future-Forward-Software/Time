@@ -127,6 +127,19 @@ namespace FFS.Time.Tests.Timer
             _numberOfExecutions.Should().Be(2);
         }
 
+        [Fact]
+        public void Run_SimulateZero_Executes()
+        {
+            var timer = new TestTimer();
+            timer.Elapsed += ActionToPerform;
+
+            timer.RunInAndStart(0, 1000);
+            timer.SimulateTime(100);
+            timer.Stop();
+
+            _numberOfExecutions.Should().Be(1);
+        }
+
         private void ActionToPerform()
         {
             Interlocked.Increment(ref _numberOfExecutions);
