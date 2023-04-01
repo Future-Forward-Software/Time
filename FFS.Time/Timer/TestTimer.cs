@@ -46,9 +46,6 @@ namespace FFS.Time.Timer
 
         public void SimulateTime(int ms)
         {
-            if (_msToWaitBetweenWork == 0)
-                throw new InvalidOperationException("Cannot simulate time before starting the timer");
-
             Interlocked.Exchange(ref _msElapsedTime, _msElapsedTime + ms);
 
             while (ShouldExecuteEvent())
@@ -62,7 +59,7 @@ namespace FFS.Time.Timer
             var executionsThatShouldBePerformed = Math.Floor(_msElapsedTime / _msToWaitBetweenWork);
             var executionsNotYetPerformed = executionsThatShouldBePerformed - _totalAmountOfExecutionsPerformed;
 
-            if (executionsNotYetPerformed > 0)
+            if (!double.IsInfinity(executionsThatShouldBePerformed) && executionsNotYetPerformed > 0)
                 return true;
 
             return false;

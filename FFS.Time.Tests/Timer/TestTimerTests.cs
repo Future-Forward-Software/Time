@@ -127,18 +127,6 @@ namespace FFS.Time.Tests.Timer
             _numberOfExecutions.Should().Be(2);
         }
 
-        [Fact]
-        public void Run_SimulateTimeBeforeStarting_ThrowsInvalidOperationException()
-        {
-            var timer = new TestTimer();
-            timer.Elapsed += ActionToPerform;
-
-            timer.Invoking(t => t.SimulateTime(6000))
-                .Should()
-                .Throw<InvalidOperationException>()
-                .WithMessage("Cannot simulate time before starting the timer");
-        }
-
         private void ActionToPerform()
         {
             Interlocked.Increment(ref _numberOfExecutions);
