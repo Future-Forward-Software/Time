@@ -35,27 +35,45 @@ namespace FFS.Time.Tests.Timer
         }
 
         [Fact]
-        public void StartNow_ExecutesEventImmediately()
+        public void RunNowAndStart_ExecutesEventImmediately()
         {
             var timer = new FfsTimer();
             timer.Elapsed += ActionToPerform;
 
-            timer.StartNow(100000);
+            timer.RunNowAndStart(100000);
             timer.Stop();
             _numberOfExecutions.Should().Be(1);
         }
 
         [Fact]
-        public async Task StartNow_ExecutesFurtherEvents()
+        public async Task RunNowAndStart_ExecutesFurtherEvents()
         {
             var timer = new FfsTimer();
             timer.Elapsed += ActionToPerform;
 
-            timer.StartNow(1000);
+            timer.RunNowAndStart(1000);
             await Task.Delay(1000);
             timer.Stop();
 
             _numberOfExecutions.Should().Be(2);
+        }
+
+        [Fact]
+        public async Task RunInAndStart_ExecutesFirstRunInGivenTimeAndThenAllOtherRunsInOtherTime()
+        {
+            var timer = new FfsTimer();
+            timer.Elapsed += ActionToPerform;
+
+            timer.RunInAndStart(1000, 4000);
+            await Task.Delay(1000);
+
+            _numberOfExecutions.Should().Be(1);
+
+            await Task.Delay(5000);
+
+            _numberOfExecutions.Should().Be(2);
+
+            timer.Stop();
         }
 
         private void ActionToPerform()

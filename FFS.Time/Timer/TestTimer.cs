@@ -8,6 +8,7 @@ namespace FFS.Time.Timer
         private double _msElapsedTime = 0;
         private int _totalAmountOfExecutionsPerformed = 0;
         private double _msToWaitBetweenWork;
+        private bool _runsFirstOnDifferentInterval;
 
         public event ElapsedHandler Elapsed;
 
@@ -16,10 +17,26 @@ namespace FFS.Time.Timer
             _msToWaitBetweenWork = ms;
         }
 
-        public void StartNow(double ms)
+        public void RunNowAndStart(double ms)
         {
             Elapsed.Invoke();
             _msToWaitBetweenWork = ms;
+        }
+
+        public void RunInAndStart(double runIn, double ms)
+        {
+            _msToWaitBetweenWork = runIn;
+            _runsFirstOnDifferentInterval = true;
+
+            void ResetTimer()
+            {
+                _msToWaitBetweenWork = ms;
+                _totalAmountOfExecutionsPerformed = 0;
+
+                Elapsed -= ResetTimer;
+            }
+
+            Elapsed += ResetTimer;
         }
 
         public void Stop()
@@ -51,7 +68,13 @@ namespace FFS.Time.Timer
         private void ExecuteEvent()
         {
             Elapsed.Invoke();
-            Interlocked.Increment(ref _totalAmountOfExecutionsPerformed);
+
+            if(!_runsFirstOnDifferentInterval)
+            {
+                Interlocked.Increment(ref _totalAmountOfExecutionsPerformed);
+            }
+
+            _runsFirstOnDifferentInterval = false;
         }
 
         public void Dispose()

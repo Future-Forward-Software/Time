@@ -90,24 +90,37 @@ namespace FFS.Time.Tests.Timer
         }
 
         [Fact]
-        public void StartNow_ExecutesEventImmediately()
+        public void RunNowAndStart_ExecutesEventImmediately()
         {
             var timer = new TestTimer();
             timer.Elapsed += ActionToPerform;
 
-            timer.StartNow(100000);
+            timer.RunNowAndStart(100000);
             timer.Stop();
             _numberOfExecutions.Should().Be(1);
         }
 
         [Fact]
-        public void StartNow_ExecutesFurtherEvents()
+        public void RunNowAndStart_ExecutesFurtherEvents()
         {
             var timer = new TestTimer();
             timer.Elapsed += ActionToPerform;
 
-            timer.StartNow(1000);
+            timer.RunNowAndStart(1000);
             timer.SimulateTime(1000);
+            timer.Stop();
+
+            _numberOfExecutions.Should().Be(2);
+        }
+
+        [Fact]
+        public void RunInAndStart_ExecutesFirstRunInGivenTimeAndThenAllOtherRunsInOtherTime()
+        {
+            var timer = new TestTimer();
+            timer.Elapsed += ActionToPerform;
+
+            timer.RunInAndStart(1000, 5000);
+            timer.SimulateTime(6000);
             timer.Stop();
 
             _numberOfExecutions.Should().Be(2);

@@ -30,7 +30,7 @@ namespace FFS.Time.Timer
             _timer.Start();
         }
 
-        public void StartNow(double ms)
+        public void RunNowAndStart(double ms)
         {
             foreach (var handler in _handlers)
             {
@@ -38,6 +38,25 @@ namespace FFS.Time.Timer
             }
 
             Start(ms);
+        }
+
+        public void RunInAndStart(double runIn, double ms)
+        {
+            _timer.Interval = runIn;
+
+            void changeIntervalsOver(object sender, ElapsedEventArgs e)
+            {
+                _timer.Interval = ms;
+                _timer.Elapsed -= changeIntervalsOver;
+            }
+            _timer.Elapsed += changeIntervalsOver;
+
+            _timer.Start();
+        }
+
+        private void SetTimerInterval(double ms)
+        {
+            _timer.Interval = ms;
         }
 
         public void Stop()
