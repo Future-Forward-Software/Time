@@ -46,6 +46,9 @@ namespace FFS.Time.Timer
 
         public void SimulateTime(int ms)
         {
+            if (_msToWaitBetweenWork == 0)
+                throw new InvalidOperationException("Cannot simulate time before starting the timer");
+
             Interlocked.Exchange(ref _msElapsedTime, _msElapsedTime + ms);
 
             while (ShouldExecuteEvent())

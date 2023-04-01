@@ -54,11 +54,6 @@ namespace FFS.Time.Timer
             _timer.Start();
         }
 
-        private void SetTimerInterval(double ms)
-        {
-            _timer.Interval = ms;
-        }
-
         public void Stop()
         {
             _timer?.Stop();
