@@ -76,6 +76,20 @@ namespace FFS.Time.Tests.Timer
             timer.Stop();
         }
 
+        [Fact]
+        public async Task RunInAndStart_ExecutesFirstRunTooFastToRemoveTimerIntervalWithoutLocking_RemovesFirstInterval()
+        {
+            var timer = new FfsTimer();
+            timer.Elapsed += ActionToPerform;
+
+            var tooLongToExecute = 99999999999999;
+            timer.RunInAndStart(1, tooLongToExecute);
+            await Task.Delay(1000);
+            timer.Stop();
+
+            _numberOfExecutions.Should().Be(1);
+        }
+
         private void ActionToPerform()
         {
             Interlocked.Increment(ref _numberOfExecutions);

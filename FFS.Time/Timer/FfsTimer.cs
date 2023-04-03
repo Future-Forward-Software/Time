@@ -11,6 +11,7 @@ namespace FFS.Time.Timer
         // converting the simple ITimer handler to the .net timer one
         private readonly IDictionary<ElapsedHandler, ElapsedEventHandler> _handlers =
             new Dictionary<ElapsedHandler, ElapsedEventHandler>();
+
         public event ElapsedHandler Elapsed {
             add {
                 void timerHandler(object sender, ElapsedEventArgs e) => value();
@@ -23,6 +24,9 @@ namespace FFS.Time.Timer
                 _handlers.Remove(value);
             }
         }
+
+        private static object _lock = new();
+
 
         public void Start(double ms)
         {
@@ -43,11 +47,13 @@ namespace FFS.Time.Timer
         public void RunInAndStart(double runIn, double ms)
         {
             _timer.Interval = runIn;
+            _timer.AutoReset = false;
 
             void changeIntervalsOver(object sender, ElapsedEventArgs e)
             {
                 _timer.Interval = ms;
                 _timer.Elapsed -= changeIntervalsOver;
+                _timer.AutoReset = true;
             }
             _timer.Elapsed += changeIntervalsOver;
 
