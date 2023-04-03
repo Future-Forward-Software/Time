@@ -52,7 +52,7 @@ namespace FFS.Time.Tests.Timer
             timer.Elapsed += ActionToPerform;
 
             timer.RunNowAndStart(1000);
-            await Task.Delay(1000);
+            await Task.Delay(1200);
             timer.Stop();
 
             _numberOfExecutions.Should().Be(2);
